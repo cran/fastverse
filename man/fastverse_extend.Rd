@@ -18,12 +18,13 @@ fastverse_extend(
 \item{topics}{integer or character. Short-keys to attach groups of related and packages suggested as extensions to the \emph{fastverse} (not case sensitive if character). Unavailable packages are skipped unless \code{install = TRUE}.
 \enumerate{
 \item \code{"TS"}: Time Series. Attaches \emph{xts}, \emph{zoo} and \emph{roll}. 
-\item \code{"DT"}: Dates and Times. Attaches \emph{lubridate}, \emph{clock}, \emph{anytime}, \emph{fasttime} and \emph{timechange}.
-\item \code{"ST"}: Strings. Attaches \emph{stringr}, \emph{stringi} and \emph{snakecase}.
+\item \code{"DT"}: Dates and Times. Attaches \emph{lubridate}, \emph{anytime}, \emph{fasttime}, \emph{nanotime}, \emph{clock}, and \emph{timechange}.
+\item \code{"ST"}: Strings. Attaches \emph{stringr}, \emph{stringi}, \emph{snakecase}, \emph{stringfish} and \emph{stringdist}.
 \item \code{"SC"}: Statistics and Computing. Attaches \emph{Rfast}, \emph{Rfast2}, \emph{parallelDist} and \emph{coop}. % \emph{fastDummies}, 
 \item \code{"SP"}: Spatial. Attaches \emph{sf}, \emph{stars} and \emph{terra}.
 \item \code{"VI"}: Visualization. Attaches \emph{dygraphs}, \emph{ggplot2}, \emph{scales}, \emph{lattice} and \emph{grid}. % \emph{RColorBrewer} and \emph{viridis}.
 \item \code{"TV"}: Tidyverse-Like. Attaches \emph{tidytable}, \emph{tidyfast}, \emph{tidyfst}, \emph{tidyft} and \emph{maditr}. % , \emph{table.express} and \emph{dtplyr}, import dplyr
+\item \code{"IO"}: Input-Output. Attaches \emph{qs} and \emph{arrow}.
 }}
 
 \item{install}{logical. Install packages not available?}
@@ -33,7 +34,7 @@ fastverse_extend(
 \item{check.conflicts}{logical. Should conflicts between extension packages and attached packages be checked?}
 }
 \value{
-This function returns nothing (\code{NULL} if assigned). Courtesy to CRAN maintainers, and because my name is not Hadley Wickham - who ostensibly is able to publish an entire \emph{tidyverse} package without these redundant statements.
+\code{fastverse_extend} returns \code{NULL} invisibly.
 }
 \description{
 Loads additional packages as part of the \emph{fastverse}. By default only for the session, but extensions can be saved up to reinstallation/updating of the \emph{fastverse} package.

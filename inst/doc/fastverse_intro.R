@@ -15,6 +15,8 @@ options(repos = c(CRAN = "https://cran.rstudio.com/")) # crayon.enabled = TRUE
 
 options(fastverse.styling = .fv_styling)
 
+NCRAN <- identical(Sys.getenv("NCRAN"), "TRUE")
+
 ## -----------------------------------------------------------------------------
 library(fastverse)
 
@@ -59,7 +61,7 @@ fastverse_detach(session = TRUE)
 ## ---- include=FALSE-----------------------------------------------------------
 options(fastverse.styling = .fv_styling)
 
-## -----------------------------------------------------------------------------
+## ---- eval=NCRAN--------------------------------------------------------------
 library(fastverse)
 
 # Adding extensions
@@ -71,14 +73,14 @@ fastverse_detach(data.table, fst, matrixStats, permanent = TRUE)
 # Adding data.table again, so it is attached last
 fastverse_extend(data.table, permanent = TRUE)
 
-## -----------------------------------------------------------------------------
+## ---- eval=NCRAN--------------------------------------------------------------
 # This will be the order in which packages are attached
 fastverse_packages(include.self = FALSE)
 
 # Check conflicts to make sure data.table functions take precedence
 fastverse_conflicts()
 
-## -----------------------------------------------------------------------------
+## ---- eval=NCRAN--------------------------------------------------------------
 # detach all packages and clear all options
 fastverse_detach(session = TRUE)
 
@@ -98,6 +100,15 @@ options("fastverse.extend")
 # This fetches packages from both the file and the option
 fastverse_packages()
 
+## ---- eval=FALSE--------------------------------------------------------------
+#  fastverse_child(
+#    name = "tsverse",
+#    title = "Time Series Package Verse",
+#    pkg = c("xts", "roll", "zoo", "tsbox", "urca", "tseries", "tsutils", "forecast"),
+#    maintainer = 'person("GivenName", "FamilyName", role = "cre", email = "your@email.com")',
+#    dir = "C:/Users/.../Documents",
+#    theme = "tidyverse")
+
 ## ---- message=FALSE, warning=FALSE--------------------------------------------
 # Recursively determine the joint dependencies of the current fastverse configuration
 fastverse_deps(recursive = TRUE) # Returns a data frame
@@ -114,9 +125,13 @@ library(fastverse) # Nothing to see here
 # This gives lots of function clashes with data.table, but they are not displayed in quiet mode
 fastverse_extend(lubridate)
 
-## -----------------------------------------------------------------------------
+## ---- eval=NCRAN--------------------------------------------------------------
 # Resetting the fastverse to defaults (clearing all permanent extensions and options)
 fastverse_reset()
 # Detaching 
 fastverse_detach()
+
+## ---- eval=!NCRAN, include=FALSE----------------------------------------------
+#  # Detaching
+#  fastverse_detach()
 
