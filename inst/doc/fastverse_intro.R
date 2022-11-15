@@ -53,7 +53,7 @@ fastverse_detach(session = TRUE, unload = TRUE)
 options(fastverse.styling = .fv_styling)
 
 ## -----------------------------------------------------------------------------
-options(fastverse.extend = c("dygraphs", "tidyfast"))
+options(fastverse.extend = c("qs", "fst"))
 library(fastverse)
 
 fastverse_detach(session = TRUE)
@@ -65,10 +65,10 @@ options(fastverse.styling = .fv_styling)
 library(fastverse)
 
 # Adding extensions
-fastverse_extend(xts, zoo, roll, dygraphs, permanent = TRUE)
+fastverse_extend(xts, zoo, roll, anytime, permanent = TRUE)
 
 # Removing some core packages
-fastverse_detach(data.table, fst, matrixStats, permanent = TRUE)
+fastverse_detach(data.table, kit, magrittr, permanent = TRUE)
 
 # Adding data.table again, so it is attached last
 fastverse_extend(data.table, permanent = TRUE)
@@ -81,7 +81,7 @@ fastverse_packages(include.self = FALSE)
 fastverse_conflicts()
 
 ## ---- eval=NCRAN--------------------------------------------------------------
-# detach all packages and clear all options
+# Detach all packages and clear all options
 fastverse_detach(session = TRUE)
 
 ## ---- include=FALSE-----------------------------------------------------------
@@ -92,7 +92,7 @@ library(fastverse)
 
 ## -----------------------------------------------------------------------------
 # Extension for the session
-fastverse_extend(Rfast2, coop)
+fastverse_extend(Rfast, coop)
 
 # These packages go here
 options("fastverse.extend")
@@ -116,6 +116,10 @@ fastverse_deps(recursive = TRUE) # Returns a data frame
 ## -----------------------------------------------------------------------------
 # Check versions and update status of packages and dependencies
 fastverse_sitrep() # default is recursive = FALSE
+
+## -----------------------------------------------------------------------------
+# Check development versions on GitHub / r-universe, and install them if desired. 
+fastverse_update(repos = .fastverse_repos) 
 
 ## -----------------------------------------------------------------------------
 fastverse_detach()

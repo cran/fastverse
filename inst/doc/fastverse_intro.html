@@ -12,11 +12,23 @@
 
 <meta name="author" content="Sebastian Krantz" />
 
-<meta name="date" content="2022-05-31" />
+<meta name="date" content="2022-11-14" />
 
 <title>Introduction to the fastverse</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -26,6 +38,7 @@
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -109,13 +122,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -127,7 +147,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -140,43 +340,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Introduction to the <em>fastverse</em></h1>
-<h3 class="subtitle">An Extensible Suite of High-Performance and Low Dependency Packages for Statistical Computing and Data Manipulation in R</h3>
+<h3 class="subtitle">An Extensible Suite of High-Performance and Low
+Dependency Packages for Statistical Computing and Data Manipulation in
+R</h3>
 <h4 class="author">Sebastian Krantz</h4>
-<h4 class="date">2022-05-31</h4>
+<h4 class="date">2022-11-14</h4>
 
 
 
-<p>The <em>fastverse</em> is an extensible suite of R packages, developed independently by various people, that jointly contribute to the objectives of:</p>
+<p>The <em>fastverse</em> is an extensible suite of R packages,
+developed independently by various people, that contribute to the
+objectives of:</p>
 <ul>
-<li>Speeding up R through heavy use of compiled code (C, C++, Fortran)</li>
-<li>Enabling more complex statistical and data manipulation operations in R</li>
-<li>Reducing the number of dependencies required for advanced computing in R</li>
+<li>Speeding up R through heavy use of compiled code (C, C++,
+Fortran)</li>
+<li>Enabling more complex statistical and data manipulation operations
+in R</li>
+<li>Reducing the number of dependencies required for advanced computing
+in R</li>
 </ul>
-<p>The <em>fastverse</em> installs 6 core packages (<em>data.table</em>, <em>collapse</em>, <em>matrixStats</em>, <em>kit</em>, <em>magrittr</em> and <em>fst</em>) that are (by default) harmonized and attached with <code>library(fastverse)</code>. These packages were selected because they provide high quality compiled code for most common statistical and data manipulation tasks, have carefully managed APIs, jointly depend only on base R and <em>Rcpp</em>, and work remarkably well together.</p>
+<p>The <em>fastverse</em> installs 4 core packages (<em>data.table</em>,
+<em>collapse</em>, <em>kit</em> and <em>magrittr</em>)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> that are (by default)
+attached with <code>library(fastverse)</code>. These packages were
+selected because they provide high quality compiled code for most common
+statistical and data manipulation tasks, have carefully managed APIs,
+jointly depend only on base R and <em>Rcpp</em>, and work remarkably
+well together.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table  1.14.2     v collapse    1.8.3 </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr    2.0.3      v matrixStats 0.61.0</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit         0.0.12     v fst         0.9.8</span></span></code></pre></div>
-<p>The <em>fastverse</em> package then provides functionality familiar from the <em>tidyverse</em> package, such as checking and reporting namespace clashes, and utilities for updating packages, listing dependencies etc…</p>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table 1.14.5         v kit        0.0.13    </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr   2.0.3.9000     v collapse   1.9.0.9000</span></span></code></pre></div>
+<p>The <em>fastverse</em> package then provides functionality familiar
+from the <em>tidyverse</em> package, such as checking and reporting
+namespace clashes, and utilities for updating packages, listing
+dependencies etc…</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for any updates</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_update</span>()</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The following packages are out of date:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  * matrixStats (0.61.0 -&gt; 0.62.0)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  * fstcore     (0.9.8 -&gt; 0.9.12)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Start a clean R session then run:</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(c(&quot;matrixStats&quot;, &quot;fstcore&quot;))</span></span></code></pre></div>
-<p>A key feature of the <em>fastverse</em> is that it can liberally be extended with other packages that can be loaded and managed using the tools this package provides. <!-- 
-While placing a clear emphasis on high-quality, high-performance and low-dependency code, as well as statistical rigor and broad based compatibility with the classes and objects most used in R - which warranted a selection of core packages and a number of [suggested extensions](<https://fastverse.github.io/fastverse/#suggested-extensions>) - the *fastverse* is not particularly opinionated about coding style, function nomenclature, or the format of inputs and outputs. --> Users are encouraged to make of use the features described in the remainder of this vignette to extend the <em>fastverse</em> or even create ‘verses’ of packages that suit their personal analysis needs. A selection of <a href="https://fastverse.github.io/fastverse/#suggested-extensions">suggested packages</a> is provided on the website<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># All fastverse packages up-to-date</span></span></code></pre></div>
+<p>A key feature of the <em>fastverse</em> is that it can be extended
+with other packages that can easily be loaded into the current session
+and then managed using the tools this package provides. <!-- 
+While placing a clear emphasis on high-quality, high-performance and low-dependency code, as well as statistical rigor and broad based compatibility with the classes and objects most used in R - which warranted a selection of core packages and a number of [suggested extensions](<https://fastverse.github.io/fastverse/#suggested-extensions>) - the *fastverse* is not particularly opinionated about coding style, function nomenclature, or the format of inputs and outputs. -->
+Users are also encouraged to make of use the features described in the
+remainder of this vignette to permanently extend the <em>fastverse</em>
+or even create ‘verses’ of packages that suit their personal analysis
+needs. A selection of <a href="https://fastverse.github.io/fastverse/#suggested-extensions">suggested
+packages</a> is provided on the website<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
 <!-- These extensions can then be loaded and managed by the *fastverse* package, just like the core packages. -->
 <div id="extending-the-fastverse-for-the-session" class="section level2">
 <h2>Extending the <em>fastverse</em> for the Session</h2>
-<p>After the core packages have been attached with <code>library(fastverse)</code>, it is possible to extend the <em>fastverse</em> for the current session by adding any number of additional packages with <code>fastverse_extend()</code>. This will attach the packages and, by default, check for namespace clashes with attached packages, as well as among the added packages.</p>
+<p>After the core packages have been attached with
+<code>library(fastverse)</code>, it is possible to extend the
+<em>fastverse</em> for the current session by adding any number of
+additional packages with <code>fastverse_extend()</code>. This will
+attach the packages and, by default, check for namespace clashes with
+attached packages, as well as among the added packages.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extend the fastverse for the session</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(xts, roll, fasttime)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.2.4 --</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.3.0 --</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v xts      0.12.1     v fasttime 1.0.2 </span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v roll     1.1.6</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
@@ -185,17 +406,23 @@ While placing a clear emphasis on high-quality, high-performance and low-depende
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># See that these are now part of the fastverse</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_packages</span>()</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  [1] &quot;data.table&quot;  &quot;magrittr&quot;    &quot;kit&quot;         &quot;collapse&quot;    &quot;matrixStats&quot;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  [6] &quot;fst&quot;         &quot;xts&quot;         &quot;roll&quot;        &quot;fasttime&quot;    &quot;fastverse&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;data.table&quot; &quot;magrittr&quot;   &quot;kit&quot;        &quot;collapse&quot;   &quot;xts&quot;       </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># [6] &quot;roll&quot;       &quot;fasttime&quot;   &quot;fastverse&quot;</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># They are also saved in a like-named option </span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;fastverse.extend&quot;</span>)</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># $fastverse.extend</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;xts&quot;      &quot;roll&quot;     &quot;fasttime&quot;</span></span></code></pre></div>
-<p>All <em>fastverse</em> packages (or particular packages) can be detached using <code>fastverse_detach</code>.</p>
+<p>All <em>fastverse</em> packages (or particular packages) can be
+detached using <code>fastverse_detach</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Detaches all packages (including the fastverse) but does not (default) unload them</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>()</span></code></pre></div>
-<p>For programming purposes it is also possible to pass vectors of packages to both <code>fastverse_extend</code> and <code>fastverse_detach</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The defaults of <code>fastverse_detach</code> are set such that detaching is very ‘light’. Packages are not unloaded and all <em>fastverse</em> options set for the session are kept.</p>
+<p>For programming purposes it is also possible to pass vectors of
+packages to both <code>fastverse_extend</code> and
+<code>fastverse_detach</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. The defaults of
+<code>fastverse_detach</code> are set such that detaching is very
+‘light’. Packages are not unloaded and all <em>fastverse</em> options
+set for the session are kept.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extensions are still here ...</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;fastverse.extend&quot;</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># $fastverse.extend</span></span>
@@ -203,69 +430,101 @@ While placing a clear emphasis on high-quality, high-performance and low-depende
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Thus attaching the fastverse again will include them</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table  1.14.2     v fst         0.9.8 </span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr    2.0.3      v xts         0.12.1</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit         0.0.12     v roll        1.1.6 </span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># v collapse    1.8.3      v fasttime    1.0.2 </span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># v matrixStats 0.61.0</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::first() masks data.table::first()</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::last()  masks data.table::last()</span></span></code></pre></div>
-<p>‘Harder’ modes of detaching can be achieved using arguments <code>unload = TRUE</code> (and <code>force = TRUE</code>) to (forcefully) detach and unload <em>fastverse</em> packages, and/or <code>session = TRUE</code> which will clear all <em>fastverse</em> options set<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table 1.14.5         v xts        0.12.1    </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr   2.0.3.9000     v roll       1.1.6     </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit        0.0.13         v fasttime   1.0.2     </span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># v collapse   1.9.0.9000</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::first()          masks data.table::first()</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::last()           masks data.table::last()</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon() masks zoo::yearmon()</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr() masks zoo::yearqtr()</span></span></code></pre></div>
+<p>‘Harder’ modes of detaching can be achieved using arguments
+<code>unload = TRUE</code> (and <code>force = TRUE</code>) to
+(forcefully) detach and unload <em>fastverse</em> packages, and/or
+<code>session = TRUE</code> which will clear all <em>fastverse</em>
+options set<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Detaching and unloading all packages and clearing options</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>(<span class="at">session =</span> <span class="cn">TRUE</span>, <span class="at">unload =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Warning: &#39;magrittr&#39; namespace cannot be unloaded:</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   namespace &#39;magrittr&#39; is imported by &#39;stringr&#39; so cannot be unloaded</span></span></code></pre></div>
-<p><code>fastverse_detach</code> can also be used to detach any other attached packages not part of the <em>fastverse</em>.</p>
-<p>Since <code>options(&quot;fastverse.extend&quot;)</code> keeps track of which packages were added to the <em>fastverse</em> for the current session, it is also possible to set it before loading the <em>fastverse</em> e.g. </p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">fastverse.extend =</span> <span class="fu">c</span>(<span class="st">&quot;dygraphs&quot;</span>, <span class="st">&quot;tidyfast&quot;</span>))</span>
+<p><code>fastverse_detach</code> can also be used to detach any other
+attached packages not part of the <em>fastverse</em>. It is recommended
+to load all packages used in the current session through
+<code>fastverse_extend()</code>, to display any conflicts when they are
+loaded and be able to keep track of the search path with
+<code>fastverse_conflicts()</code>.</p>
+<p>Since <code>options(&quot;fastverse.extend&quot;)</code> keeps track of which
+packages were added to the <em>fastverse</em> for the current session,
+it is also possible to set it before loading the <em>fastverse</em>
+e.g. </p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">fastverse.extend =</span> <span class="fu">c</span>(<span class="st">&quot;qs&quot;</span>, <span class="st">&quot;fst&quot;</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table  1.14.2      v matrixStats 0.61.0 </span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr    2.0.3       v fst         0.9.8  </span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit         0.0.12      v dygraphs    1.1.1.6</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># v collapse    1.8.3       v tidyfast    0.2.1</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>(<span class="at">session =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table 1.14.5         v collapse   1.9.0.9000</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr   2.0.3.9000     v qs         0.25.1.1  </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit        0.0.13         v fst        0.9.8</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon() masks zoo::yearmon()</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr() masks zoo::yearqtr()</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>(<span class="at">session =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="permanent-extensions" class="section level2">
 <h2>Permanent Extensions</h2>
-<p><code>fasvtverse_extend</code> and <code>fastverse_detach</code> both have an argument <code>permanent = TRUE</code> which can be used to make these changes persist across R sessions. This is implemented using a global configuration file saved to the package directory<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
-<p>For example, suppose most of my work involves time series analysis, and I would like to add <em>xts</em>, <em>zoo</em>, <em>roll</em>, and <em>dygraphs</em> to my <em>fastverse</em>. Let’s say I also don’t really use the <em>fst</em> file format, and I don’t really need <em>matrixStats</em> either as I can do most of the time series statistics I need with base R and <em>collapse</em>. Let’s finally say that I don’t want <code>xts::first</code> and <code>xts::last</code> to mask <code>data.table::first</code> and <code>data.table::last</code>.</p>
-<p>Then I could permanently modify my <em>fastverse</em> as follows<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>:</p>
+<p><code>fasvtverse_extend</code> and <code>fastverse_detach</code> both
+have an argument <code>permanent = TRUE</code> which can be used to make
+these changes persist across R sessions. This is implemented using a
+global configuration file saved to the package directory<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
+<p>For example, suppose most of my work involves time series analysis,
+and I would like to add <em>xts</em>, <em>zoo</em>, <em>anytime</em> and
+<em>roll</em> to my <em>fastverse</em>. Let’s say I also don’t really
+need the switches and parallel statistics provided by the <em>kit</em>
+package and I am completely happy with the base pipe so I don’t need
+<em>magrittr</em>. Let’s finally say that I don’t want
+<code>xts::first</code> and <code>xts::last</code> to mask
+<code>data.table::first</code> and <code>data.table::last</code>.</p>
+<p>Then I could permanently modify my <em>fastverse</em> as follows<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table  1.14.2     v collapse    1.8.3 </span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr    2.0.3      v matrixStats 0.61.0</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit         0.0.12     v fst         0.9.8</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding extensions</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(xts, zoo, roll, dygraphs, <span class="at">permanent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># v xts      0.12.1      v dygraphs 1.1.1.6</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># v roll     1.1.6</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date()         masks base::as.Date()</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date.numeric() masks base::as.Date.numeric()</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::first()           masks data.table::first()</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::last()            masks data.table::last()</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing some core packages</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>(data.table, fst, matrixStats, <span class="at">permanent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding data.table again, so it is attached last</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(data.table, <span class="at">permanent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table 1.14.2</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::first() masks xts::first()</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::last()  masks xts::last()</span></span></code></pre></div>
-<p>To verify our modification, we can see the order in which the packages are attached, and do a conflict check:</p>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table 1.14.5         v kit        0.0.13    </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr   2.0.3.9000     v collapse   1.9.0.9000</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon() masks zoo::yearmon()</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr() masks zoo::yearqtr()</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding extensions</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(xts, zoo, roll, anytime, <span class="at">permanent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># v xts     0.12.1     v anytime 0.3.9 </span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># v roll    1.1.6</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date()         masks base::as.Date()</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date.numeric() masks base::as.Date.numeric()</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::first()           masks data.table::first()</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># x xts::last()            masks data.table::last()</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon()  masks zoo::yearmon()</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr()  masks zoo::yearqtr()</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing some core packages</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>(data.table, kit, magrittr, <span class="at">permanent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding data.table again, so it is attached last</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(data.table, <span class="at">permanent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co"># v data.table 1.14.5</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::first()   masks xts::first()</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::last()    masks xts::last()</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon() masks zoo::yearmon()</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr() masks zoo::yearqtr()</span></span></code></pre></div>
+<p>To verify our modification, we can see the order in which the
+packages are attached, and do a conflict check:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will be the order in which packages are attached</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_packages</span>(<span class="at">include.self =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;magrittr&quot;   &quot;kit&quot;        &quot;collapse&quot;   &quot;xts&quot;        &quot;zoo&quot;       </span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [6] &quot;roll&quot;       &quot;dygraphs&quot;   &quot;data.table&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;collapse&quot;   &quot;xts&quot;        &quot;zoo&quot;        &quot;roll&quot;       &quot;anytime&quot;   </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [6] &quot;data.table&quot;</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check conflicts to make sure data.table functions take precedence</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_conflicts</span>()</span>
@@ -273,47 +532,69 @@ While placing a clear emphasis on high-quality, high-performance and low-depende
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date()         masks base::as.Date()</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date.numeric() masks base::as.Date.numeric()</span></span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::first()    masks xts::first()</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::last()     masks xts::last()</span></span></code></pre></div>
-<p>Note that <code>options(&quot;fastverse.extend&quot;)</code> is still empty, because we have written those changes to a config file<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. Now lets see if our permanent modification worked:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach all packages and clear all options</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::last()     masks xts::last()</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon()  masks zoo::yearmon()</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr()  masks zoo::yearqtr()</span></span></code></pre></div>
+<p>Note that <code>options(&quot;fastverse.extend&quot;)</code> is still empty,
+because we have written those changes to a config file<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. Now lets see if our
+permanent modification worked:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Detach all packages and clear all options</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>(<span class="at">session =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse) </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># v magrittr   2.0.3       v zoo        1.8.10 </span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v kit        0.0.12      v roll       1.1.6  </span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v collapse   1.8.3       v dygraphs   1.1.1.6</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># v xts        0.12.1      v data.table 1.14.2</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date()         masks base::as.Date()</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date.numeric() masks base::as.Date.numeric()</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::first()    masks xts::first()</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::last()     masks xts::last()</span></span></code></pre></div>
-<p>After this permanent modification, the <em>fastverse</em> can still be extend for the session:</p>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching packages --------------------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># v collapse   1.9.0.9000     v roll       1.1.6     </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v xts        0.12.1         v anytime    0.3.9     </span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># v zoo        1.8.10         v data.table 1.14.5</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date()         masks base::as.Date()</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># x zoo::as.Date.numeric() masks base::as.Date.numeric()</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::first()    masks xts::first()</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::last()     masks xts::last()</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearmon()  masks zoo::yearmon()</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># x data.table::yearqtr()  masks zoo::yearqtr()</span></span></code></pre></div>
+<p>After this permanent modification, the <em>fastverse</em> can still
+be extend for the session:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extension for the session</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(Rfast2, coop)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.2.4 --</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v Rfast2 0.1.1     v coop   0.6.3</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(Rfast, coop)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Attaching extension packages ----------------------------- fastverse 0.3.0 --</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># v Rfast 2.0.4     v coop  0.6.3</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Conflicts ------------------------------------------ fastverse_conflicts() --</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># x coop::covar() masks Rfast2::covar()</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># These packages go here</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;fastverse.extend&quot;</span>)</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># $fastverse.extend</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;Rfast2&quot; &quot;coop&quot;</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># This fetches packages from both the file and the option</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_packages</span>()</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  [1] &quot;magrittr&quot;   &quot;kit&quot;        &quot;collapse&quot;   &quot;xts&quot;        &quot;zoo&quot;       </span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  [6] &quot;roll&quot;       &quot;dygraphs&quot;   &quot;data.table&quot; &quot;Rfast2&quot;     &quot;coop&quot;      </span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># [11] &quot;fastverse&quot;</span></span></code></pre></div>
-<p>As long as the current installation of the <em>fastverse</em> is kept, these modifications will persist across R sessions. Needless to say this is not ideal as reinstallation of the <em>fastverse</em> will remove the config file. Therefore, the <em>fastverse</em> also offers a persistent and more flexible mechanism to configure it inside projects.</p>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># x Rfast::group()     masks collapse::group()</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x Rfast::transpose() masks data.table::transpose()</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># These packages go here</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;fastverse.extend&quot;</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># $fastverse.extend</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;Rfast&quot; &quot;coop&quot;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># This fetches packages from both the file and the option</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_packages</span>()</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;collapse&quot;   &quot;xts&quot;        &quot;zoo&quot;        &quot;roll&quot;       &quot;anytime&quot;   </span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># [6] &quot;data.table&quot; &quot;Rfast&quot;      &quot;coop&quot;       &quot;fastverse&quot;</span></span></code></pre></div>
+<p>As long as the current installation of the <em>fastverse</em> is
+kept, these modifications will persist across R sessions. Needless to
+say this is not ideal as reinstallation of the <em>fastverse</em> will
+remove the config file. Therefore, the <em>fastverse</em> also offers a
+persistent and more flexible mechanism to configure it inside
+projects.</p>
 </div>
 <div id="custom-fastverse-configurations-for-projects" class="section level2">
 <h2>Custom <em>fastverse</em> Configurations for Projects</h2>
-<p>You can put together a custom collection of packages for a project, and load / manage them with <code>library(fastverse)</code>.</p>
-<p>For this you need to include a configuration file named <code>.fastverse</code> (no file extension) inside a project directory, and place inside that file the names of packages to be loaded when calling <code>library(fastverse)</code><a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. Note that <strong>all</strong> packages to be loaded as core <em>fastverse</em> for your project need to be included in that file, in the order they should be attached.</p>
-<p>In addition, you can set global options and environment variables, either before or after the list of packages. Options must be prefixed with <code>_opt_</code> and environment variables with <code>_env_</code>, and either must be placed on separate lines. For example, including a <code>.fastverse</code> script like this:</p>
-<pre><code>_opt_collapse_mask = c(&quot;manip&quot;, &quot;helper)
+<p>You can put together a custom collection of packages for a project,
+and load / manage them with <code>library(fastverse)</code>.</p>
+<p>For this you need to include a configuration file named
+<code>.fastverse</code> (no file extension) inside a project directory,
+and place inside that file the names of packages to be loaded when
+calling <code>library(fastverse)</code><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. Note that
+<strong>all</strong> packages to be loaded as core <em>fastverse</em>
+for your project need to be included in that file, in the order they
+should be attached.</p>
+<p>In addition, you can set global options and environment variables,
+either before or after the list of packages. Options must be prefixed
+with <code>_opt_</code> and environment variables with
+<code>_env_</code>, and either must be placed on separate lines. For
+example, including a <code>.fastverse</code> script like this</p>
+<pre><code>_opt_collapse_mask = c(&quot;manip&quot;, &quot;helper&quot;)
 _opt_fastverse.install = TRUE
 
 data.table, kit, magrittr, collapse, qs, fixest, 
@@ -322,16 +603,47 @@ ranger, robustbase, decompr
 _opt_max.print = 100
 _opt_kit.nThread = 4
 _env_NCRAN = TRUE</code></pre>
-<p>in a project directory, and placing <code>library(fastverse)</code> at the top of an R script in the project will first set <code>options(collapse_mask = c(&quot;manip&quot;, &quot;helper), fastverse.install = TRUE)</code><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>, then attach all the packages in the order provided, and then set <code>options(max.print = 100, kit.nThread = 4)</code> and <code>Sys.setenv(NCRAN = TRUE)</code>. Note that packages can be spread across multiple lines, but need to be together i.e. they cannot be separated by options.</p>
-<p>Using the <em>fastverse</em> to jointly load important packages and set important options can facilitate package management inside projects and serve as a bridge between loading packages individually and using more rigorous package and namespace management solutions such as <a href="https://github.com/rstudio/renv">renv</a>, <a href="https://github.com/r-lib/conflicted">conflicted</a>, <a href="https://github.com/klmr/box">box</a> or <a href="https://github.com/rticulate/import">import</a>.</p>
-<p>At the most basic level, loading packages with the <em>fastverse</em> displays the package versions and checks namespace conflicts, helping you spot issues that might arise as packages are updated. It also allows you to easily check the dependencies and update status of packages used in your project with <code>fastverse_sitrep()</code>, and update if necessary with <code>fastverse_update()</code>.</p>
+<p>in a project directory, and placing <code>library(fastverse)</code>
+at the top of an R script in the project will first set
+<code>options(collapse_mask = c(&quot;manip&quot;, &quot;helper), fastverse.install = TRUE)</code><a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>, then
+attach all the packages in the order provided, and then set
+<code>options(max.print = 100, kit.nThread = 4)</code> and
+<code>Sys.setenv(NCRAN = TRUE)</code>. Note that packages can be spread
+across multiple lines, but need to be together i.e. they cannot be
+separated by options. Alternatively you can also use an
+<code>.Rprofile</code> file and set <em>fastverse</em> options such as
+<code>options(fastverse.extend = c(...packages...))</code> there. The
+advantage of <code>.fastverse</code> files is that you can specify
+options to be loaded before or after the loading of packages through
+<code>library(fastverse)</code><a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>, and you can also prevent core packages
+from being loaded by excluding them from the <code>.fastverse</code>
+file.</p>
+<p>Using the <em>fastverse</em> to jointly load important packages and
+set important options can facilitate package management inside projects
+and serve as a bridge between loading packages individually and using
+more rigorous package and namespace management solutions such as <a href="https://github.com/rstudio/renv">renv</a>, <a href="https://github.com/r-lib/conflicted">conflicted</a>, <a href="https://github.com/klmr/box">box</a> or <a href="https://github.com/rticulate/import">import</a>.</p>
+<p>At the most basic level, loading packages with the <em>fastverse</em>
+displays the package versions and checks namespace conflicts, helping
+you spot issues that might arise as packages are updated. It also allows
+you to easily check the dependencies and update status of packages used
+in your project with <code>fastverse_sitrep()</code>, and update if
+necessary with <code>fastverse_update()</code>.</p>
 <!-- 
 You additionally have the option to call `fastverse::fastverse_install()` at the beginning of a project file before calling `library(fastverse)`. This will execute a swift check if all packages listed in `.fastverse` are available, and, by default, install any missing packages needed for the project. -->
-<p>Using a config file in a project will ignore any global configuration as discussed in the previous section. You can still extend the <em>fastverse</em> inside a project session using <code>fastverse_extend</code>, or <code>options(&quot;fastvers.extend&quot;)</code> before <code>library(fastverse)</code><a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>.</p>
+<p>Using a config file in a project will ignore any global configuration
+as discussed in the previous section. You can still extend the
+<em>fastverse</em> inside a project session using
+<code>fastverse_extend</code> (or
+<code>options(fastvers.extend = c(...packages...))</code> before
+<code>library(fastverse)</code>).</p>
 </div>
 <div id="creating-separate-package-verses" class="section level2">
 <h2>Creating Separate Package-Verses</h2>
-<p>An added feature in version 0.2.0 if the <em>fastverse</em> is the ability to create wholly separate and fully customizable verses - with the <code>fastverse_child()</code> function. Let’s say I would like to create a verse for time series analysis that I want to keep separate from the <em>fastverse</em>. This is easily done using e.g.</p>
+<p>At last, you can also create wholly separate and fully customizable
+verses - with the <code>fastverse_child()</code> function. Let’s say I
+would like to create a verse for time series analysis that I want to
+keep separate from the <em>fastverse</em>. This is easily done using
+e.g.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_child</span>(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;tsverse&quot;</span>, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Time Series Package Verse&quot;</span>, </span>
@@ -339,103 +651,188 @@ You additionally have the option to call `fastverse::fastverse_install()` at the
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">maintainer =</span> <span class="st">&#39;person(&quot;GivenName&quot;, &quot;FamilyName&quot;, role = &quot;cre&quot;, email = &quot;your@email.com&quot;)&#39;</span>,</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">dir =</span> <span class="st">&quot;C:/Users/.../Documents&quot;</span>, </span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">theme =</span> <span class="st">&quot;tidyverse&quot;</span>)</span></code></pre></div>
-<p>By default (<code>install = TRUE</code>, <code>keep.dir = TRUE</code>) the package is installed and a source directory is created under dir/name, allowing further edits to the package. Such <em>fastverse</em> children inherit 90% of the functionality of the <em>fastverse</em> package: they are not permanently globally extensible and can not bear children themselves, but can be configured for projects<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> and extended in the session. The function uses a prepared ‘child’ branch of the <a href="https://github.com/fastverse/fastverse">GitHub repository</a>, and thus does not require any further packages such as <code>devtools</code>.</p>
+<p>By default (<code>install = TRUE</code>,
+<code>keep.dir = TRUE</code>) the package is installed and a source
+directory is created under dir/name, allowing further edits to the
+package. Such <em>fastverse</em> children inherit 90% of the
+functionality of the <em>fastverse</em> package: they are not
+permanently globally extensible and can not bear children themselves,
+but can be configured for projects (using, in this case, a
+<code>.tsverse</code> config file and options starting with ‘tsverse’)
+and extended in the session. The function uses a prepared ‘child’ branch
+of the <a href="https://github.com/fastverse/fastverse">GitHub
+repository</a>, and thus does not require any further packages such as
+<code>devtools</code>.</p>
 </div>
 <div id="dependencies-situational-reports-and-updating" class="section level2">
 <h2>Dependencies, Situational Reports and Updating</h2>
-<p>Just like it’s <em>tidyverse</em> equivalent, <code>fastverse_deps()</code> (recursively) determines the joint dependencies of <em>fastverse</em> packages and also checks local versions against CRAN versions.</p>
+<p>Just like it’s <em>tidyverse</em> equivalent,
+<code>fastverse_deps()</code> (recursively) determines the joint
+dependencies of <em>fastverse</em> packages and also checks local
+versions against CRAN versions.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recursively determine the joint dependencies of the current fastverse configuration</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_deps</span>(<span class="at">recursive =</span> <span class="cn">TRUE</span>) <span class="co"># Returns a data frame</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#          package       cran      local behind</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1       magrittr      2.0.3      2.0.3  FALSE</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2            kit     0.0.11     0.0.12  FALSE</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3       collapse      1.7.6      1.8.3  FALSE</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 4            xts     0.12.1     0.12.1  FALSE</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 5            zoo     1.8.10     1.8.10  FALSE</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 6           roll      1.1.6      1.1.6  FALSE</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 7       dygraphs    1.1.1.6    1.1.1.6  FALSE</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 8     data.table     1.14.2     1.14.2  FALSE</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 9         Rfast2      0.1.3      0.1.1   TRUE</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 10          coop      0.6.3      0.6.3  FALSE</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 11          RANN      2.6.1      2.6.1  FALSE</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 12          Rcpp    1.0.8.3    1.0.8.3  FALSE</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 13 RcppArmadillo 0.11.1.1.0 0.11.1.1.0  FALSE</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 14       RcppGSL     0.3.11     0.3.10   TRUE</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 15  RcppParallel      5.1.5      5.1.4   TRUE</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 16  RcppZiggurat      0.1.6      0.1.6  FALSE</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 17         Rfast      2.0.6      2.0.4   TRUE</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 18     base64enc      0.1.3      0.1.3  FALSE</span></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 19        digest     0.6.29     0.6.29  FALSE</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 20       fastmap      1.1.0      1.1.0  FALSE</span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 21     htmltools      0.5.2      0.5.2  FALSE</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 22   htmlwidgets      1.5.4      1.5.4  FALSE</span></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 23      jsonlite      1.8.0      1.8.0  FALSE</span></span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 24       lattice    0.20.45    0.20.44   TRUE</span></span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 25         rlang      1.0.2      1.0.2  FALSE</span></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 26          yaml      2.3.5      2.3.5  FALSE</span></span></code></pre></div>
-<p>Additional flexibility is offered by the <code>pkg</code> argument allowing dependency and update status checks for any other packages. <code>fastverse_sitrep()</code> displays the same information in a more elegant printout, also showing the version of R, and whether any global or project-level configuration files - as discussed in previous sections - are used.</p>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#          package      repos      local behind</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1       collapse      1.8.9 1.9.0.9000  FALSE</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2            xts     0.12.2     0.12.1   TRUE</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3            zoo     1.8.11     1.8.10   TRUE</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 4           roll      1.1.6      1.1.6  FALSE</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 5        anytime      0.3.9      0.3.9  FALSE</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 6     data.table     1.14.4     1.14.5  FALSE</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 7          Rfast      2.0.6      2.0.4   TRUE</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 8           coop      0.6.3      0.6.3  FALSE</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 9             BH   1.78.0.0   1.78.0.0  FALSE</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 10          Rcpp      1.0.9      1.0.9  FALSE</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 11 RcppArmadillo 0.11.4.2.1 0.11.1.1.0   TRUE</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 12       RcppGSL     0.3.12     0.3.10   TRUE</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 13  RcppParallel      5.1.5      5.1.4   TRUE</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 14  RcppZiggurat      0.1.6      0.1.6  FALSE</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 15       lattice    0.20.45    0.20.44   TRUE</span></span></code></pre></div>
+<p>Additional flexibility is offered by the <code>pkg</code> argument
+allowing dependency and update status checks for any other packages.
+<code>fastverse_sitrep()</code> displays the same information in a more
+elegant printout, also showing the version of R, and whether any global
+or project-level configuration files - as discussed in previous sections
+- are used.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check versions and update status of packages and dependencies</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_sitrep</span>() <span class="co"># default is recursive = FALSE</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- fastverse 0.2.4: Situation Report -------------------------------- R 4.1.1 --</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -- fastverse 0.3.0: Situation Report -------------------------------- R 4.1.1 --</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Global config file: TRUE</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Project config file: FALSE</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Core packages --------------------------------------------------------------- </span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  * magrittr      (2.0.3)</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  * kit           (0.0.11)</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  * collapse      (1.7.6)</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  * xts           (0.12.1)</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  * zoo           (1.8.10)</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  * roll          (1.1.6)</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  * dygraphs      (1.1.1.6)</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  * data.table    (1.14.2)</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Extension packages ---------------------------------------------------------- </span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Rfast2        (0.1.1 &lt; 0.1.3)</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  * coop          (0.6.3)</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Dependencies ---------------------------------------------------------------- </span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RANN          (2.6.1)</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Rcpp          (1.0.8.3)</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppArmadillo (0.11.1.1.0)</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppParallel  (5.1.4 &lt; 5.1.5)</span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Rfast         (2.0.4 &lt; 2.0.6)</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  * htmltools     (0.5.2)</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  * htmlwidgets   (1.5.4)</span></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  * lattice       (0.20.44 &lt; 0.20.45)</span></span></code></pre></div>
-<p><code>fastverse_update()</code> can be used to (default) print an <code>install.packages()</code> statement to update <em>fastverse</em> packages and dependencies, or to install updates straight away (<code>install = TRUE</code>). In all three functions, <code>check.deps = FALSE</code> can be specified to exclude dependencies of <em>fastverse</em> packages, <code>recursive = TRUE</code> can be used to check all dependencies, and <code>include.self = TRUE</code> can be used to also check for updates of the <code>fastverse</code> package itself.</p>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  * collapse      (1.9.0.9000)</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  * xts           (0.12.1 &lt; 0.12.2)</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  * zoo           (1.8.10 &lt; 1.8.11)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  * roll          (1.1.6)</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  * anytime       (0.3.9)</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  * data.table    (1.14.5)</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Extension packages ---------------------------------------------------------- </span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Rfast         (2.0.4 &lt; 2.0.6)</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  * coop          (0.6.3)</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Dependencies ---------------------------------------------------------------- </span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  * BH            (1.78.0.0)</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Rcpp          (1.0.9)</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppArmadillo (0.11.1.1.0 &lt; 0.11.4.2.1)</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppParallel  (5.1.4 &lt; 5.1.5)</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppZiggurat  (0.1.6)</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  * lattice       (0.20.44 &lt; 0.20.45)</span></span></code></pre></div>
+<p><code>fastverse_update()</code> can be used to (default) print an
+<code>install.packages()</code> statement to update <em>fastverse</em>
+packages and dependencies, or to install updates straight away
+(<code>install = TRUE</code>). In all three functions,
+<code>check.deps = FALSE</code> can be specified to exclude dependencies
+of <em>fastverse</em> packages, <code>recursive = TRUE</code> can be
+used to check all dependencies, and <code>include.self = TRUE</code> can
+be used to also check for updates of the <code>fastverse</code> package
+itself.</p>
+<p>The development versions of all core and suggested <em>fastverse</em>
+packages are also collected on an <a href="https://fastverse.r-universe.dev">r-universe server</a> at <a href="https://fastverse.r-universe.dev" class="uri">https://fastverse.r-universe.dev</a>. Mac/Windows binaries
+are built on this server within 24h after a change to the main branch of
+the GitHub repository. Since v0.3.0 the package exports a global macro
+<code>.fastverse_repos</code> which contains the URL of this repository
+alongside the CRAN repository URL (needed for non-<em>fastverse</em>
+dependencies). Functions <code>fastverse_deps()</code>,
+<code>fastverse_update()</code>, <code>fastverse_install()</code> and
+<code>fastverse_siteep()</code> have a <code>repos</code> argument which
+defaults to <code>getOption(&quot;repos&quot;)</code> (CRAN), but users can set
+<code>repos = .fastverse_repos</code> to check against / update /
+install development versions of <em>fastverse</em> packages from
+r-universe.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check development versions on GitHub / r-universe, and install them if desired. </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_update</span>(<span class="at">repos =</span> .fastverse_repos) </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The following packages are out of date:</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  * xts           (0.12.1 -&gt; 0.12.9900)</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  * zoo           (1.8.10 -&gt; 1.8.11)</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  * anytime       (0.3.9 -&gt; 0.3.9.3)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  * Rfast         (2.0.4 -&gt; 2.0.6)</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppArmadillo (0.11.1.1.0 -&gt; 0.11.4.2.1)</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  * RcppParallel  (5.1.4 -&gt; 5.1.5)</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  * lattice       (0.20.44 -&gt; 0.20.45)</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Start a clean R session then run:</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(c(&quot;xts&quot;, &quot;zoo&quot;, &quot;anytime&quot;, &quot;Rfast&quot;, &quot;RcppArmadillo&quot;, &quot;RcppParallel&quot;, </span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;lattice&quot;), repos = c(fastverse = &quot;https://fastverse.r-universe.dev&quot;, CRAN = &quot;https://cloud.r-project.org&quot;))</span></span></code></pre></div>
 </div>
 <div id="other-fastverse-options" class="section level2">
 <h2>Other <em>fastverse</em> Options</h2>
-<p>Apart from <code>&quot;fastverse.extend&quot;</code>, the <em>fastverse</em> also has options <code>&quot;fastverse.install&quot;</code>, <code>&quot;fastverse.styling&quot;</code> and <code>&quot;fastverse.quiet&quot;</code><a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>. Setting <code>options(fastverse.install = TRUE)</code> before <code>library(fastverse)</code> will make sure any packages missing on your system will be installed beforehand. This can also be done ex-post using the <code>fastverse_install()</code> function. Setting <code>options(fastverse.styling = FALSE)</code> will disable coloured text printed to the R console (as done for this vignette). <code>options(fastverse.quiet = TRUE)</code> will omit any messages printed from <code>library(fastverse)</code> and <code>fastverse_extend()</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>()</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">fastverse.quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse) <span class="co"># Nothing to see here</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># This gives lots of function clashes with data.table, but they are not displayed in quiet mode</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(lubridate)</span></code></pre></div>
-<p>If you only want to omit a function clash check when calling <code>fastverse_extend</code>, you can also use <code>fastverse_extend(..., check.conflicts = FALSE)</code>.</p>
+<p>Apart from <code>&quot;fastverse.extend&quot;</code>, the <em>fastverse</em>
+also has options <code>&quot;fastverse.install&quot;</code>,
+<code>&quot;fastverse.styling&quot;</code> and <code>&quot;fastverse.quiet&quot;</code>.
+Setting <code>options(fastverse.install = TRUE)</code> before
+<code>library(fastverse)</code> will make sure any packages missing on
+your system will be installed beforehand. This can also be done ex-post
+using the <code>fastverse_install()</code> function. Setting
+<code>options(fastverse.styling = FALSE)</code> will disable coloured
+text printed to the R console (as done for this vignette).
+<code>options(fastverse.quiet = TRUE)</code> will omit any messages
+printed from <code>library(fastverse)</code> and
+<code>fastverse_extend()</code> or <code>fastverse_install()</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">fastverse.quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastverse) <span class="co"># Nothing to see here</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># This gives lots of function clashes with data.table, but they are not displayed in quiet mode</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_extend</span>(lubridate)</span></code></pre></div>
+<p>If you only want to omit a function clash check when calling
+<code>fastverse_extend</code>, you can also use
+<code>fastverse_extend(..., check.conflicts = FALSE)</code>.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>The <em>fastverse</em> was developed principally for 2 reasons: to promote quality high-performance software development for R, and to provide a flexible approach to package loading and management in R, particularly for users wishing to combine various high-performance packages in statistical workflows. To the extent that high-performance software development in R continues to prioritize low-dependency and stable APIs, complex statistical and project workflows can be developed without sophisticated package management solutions.</p>
+<p>The <em>fastverse</em> was developed principally for 2 reasons: to
+promote quality high-performance software development for R, and to
+provide a flexible approach to package loading and management in R,
+particularly for users wishing to combine various high-performance
+packages in statistical workflows. To the extent that high-performance
+software development in R continues to prioritize low-dependency and
+stable APIs, complex statistical and project workflows can be developed
+without sophisticated package management solutions.</p>
 <!-- This vignette introduced the key features of the package. Suggested *fastverse* extension packages are introduced in the [README](<https://fastverse.github.io/fastverse/#suggested-extensions>) file. -->
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resetting the fastverse to defaults (clearing all permanent extensions and options)</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_reset</span>()</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Detaching </span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resetting the fastverse to defaults (clearing all permanent extensions and options)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_reset</span>()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Detaching </span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fastverse_detach</span>()</span></code></pre></div>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>Let me know about other packages you think should be featured there.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>In particular, the <code>...</code> expression is first captured using <code>substitute(c(...))</code>, and then evaluated inside <code>tryCatch</code>. If this evaluation fails or did not result in a character vector, the expression is coerced to character.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p><code>options(&quot;fastverse.quiet&quot;)</code> and <code>options(&quot;fastverse.styling&quot;)</code> will only be cleared if all packages are detached. If selected packages are detached, they are removed from <code>options(&quot;fastverse.extend&quot;)</code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>Thus it will be removed when the <em>fastverse</em> is reinstalled.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
-<li id="fn5"><p>I note that namespace conflicts can also be detected and handled with the <a href="https://cran.r-project.org/package=conflicted">conflicted</a> package on CRAN.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>When fetching the names of <em>fastverse</em> packages, <code>fastverse_packages</code> first checks any config file and then checks <code>options(&quot;fastverse.extend&quot;)</code>.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>You can place package names in that file any manner you deem suitable: separated using spaces or commas, on one or multiple lines. Note that the file will be read from left to right and from top to bottom. Packages are attached in the order found in the file.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
-<li id="fn8"><p>Setting <code>options(fastverse.install = TRUE)</code> before loading the packages will make sure any packages missing on your system will be installed beforehand. <code>options(collapse_mask = ...)</code> can be used to make base R and dplyr functions with faster versions provided in the <em>collapse</em> package. See <code>help(&quot;collapse-options&quot;)</code>.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
-<li id="fn9"><p>If you populate <code>options(&quot;fastvers.extend&quot;)</code> before calling <code>library(fastverse)</code>, with <code>_opt_fastverse.install = TRUE</code> set in <code>.fastverse</code>, the availability of these packages will also be guaranteed.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
-<li id="fn10"><p>Using, in this case, a <code>.tsverse</code> config file.<a href="#fnref10" class="footnote-back">↩︎</a></p></li>
-<li id="fn11"><p>I note that at this point in time it is not possible to permanently set <code>options(&quot;fastverse.quiet&quot;)</code> or <code>options(&quot;fastverse.styling&quot;)</code>.<a href="#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Before v0.3.0 <em>matrixStats</em> and <em>fst</em> were
+past of the core <em>fastverse</em>, but were removed following a poll
+on Twitter in November 2022 where more than 50% voted in favor of
+removing them from the core <em>fastverse</em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Let me know about other packages you think should be
+featured there.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>In particular, the <code>...</code> expression is first
+captured using <code>substitute(c(...))</code>, and then evaluated
+inside <code>tryCatch</code>. If this evaluation fails or did not result
+in a character vector, the expression is coerced to character.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p><code>options(&quot;fastverse.quiet&quot;)</code> and
+<code>options(&quot;fastverse.styling&quot;)</code> will only be cleared if all
+packages are detached. If selected packages are detached, they are
+removed from <code>options(&quot;fastverse.extend&quot;)</code>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Thus it will be removed when the <em>fastverse</em> is
+reinstalled.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>I note that namespace conflicts can also be detected and
+handled with the <a href="https://cran.r-project.org/package=conflicted">conflicted</a>
+package on CRAN.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>When fetching the names of <em>fastverse</em> packages,
+<code>fastverse_packages</code> first checks any config file and then
+checks <code>options(&quot;fastverse.extend&quot;)</code>.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>You can place package names in that file any manner you
+deem suitable: separated using spaces or commas, on one or multiple
+lines. Note that the file will be read from left to right and from top
+to bottom. Packages are attached in the order found in the file.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>Setting <code>options(fastverse.install = TRUE)</code>
+before loading the packages will make sure any packages missing on your
+system will be installed beforehand.
+<code>options(collapse_mask = ...)</code> can be used to make base R and
+dplyr functions with faster versions provided in the <em>collapse</em>
+package. See <code>help(&quot;collapse-options&quot;)</code>.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>This may be useful if packages set certain options when
+being loaded, overwriting any prior settings, or if options affect the
+way packages are loaded and should better be set after they are
+loaded.<a href="#fnref10" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

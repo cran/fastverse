@@ -70,7 +70,7 @@ project_options <- function() {
 #' 
 #' Core packages are first fetched from a project-level configuration file (if found), else from a global configuration file (if found), 
 #' otherwise the standard set of core packages is returned. In addition, if \code{extensions = TRUE}, any packages used to extend the \emph{fastverse} for the current 
-#' session are also returned. 
+#' session (fetched from \code{getOption("fastverse.extend")}) are also returned. 
 #' 
 #' @param extensions logical. \code{TRUE} appends the set of core packages with all packages found in \code{options("fastverse.extend")}. 
 #' @param include.self logical. Include the \emph{fastverse} package in the list?
@@ -154,18 +154,18 @@ rule <- function(left, right = NULL, style.left = identity, style.right = identi
   left <- as.character(left)
   if(length(right)) {
     right <- as.character(right)
-    w <- n - nchar(left) - nchar(right) - 8L
+    width <- n - nchar(left) - nchar(right) - 8L
     if(style.rule) {
-      res <- paste(c(text_col("-- "), style.left(left), " ", text_col(paste(rep("-", w), collapse = "")), " ", style.right(right), text_col(" --")), collapse = "")
+      res <- paste(c(text_col("-- "), style.left(left), " ", text_col(paste(rep("-", width), collapse = "")), " ", style.right(right), text_col(" --")), collapse = "")
     } else {
-      res <- paste(c("-- ", style.left(left), " ", rep("-", w), " ", style.right(right), " --"), collapse = "")
+      res <- paste(c("-- ", style.left(left), " ", rep("-", width), " ", style.right(right), " --"), collapse = "")
     }
   } else {
-    w <- n - nchar(left) - 4L
+    width <- n - nchar(left) - 4L
     if(style.rule) {
-      res <- paste(c(text_col("-- "), style.left(left), " ", text_col(paste(rep("-", w), collapse = ""))), collapse = "")
+      res <- paste(c(text_col("-- "), style.left(left), " ", text_col(paste(rep("-", width), collapse = ""))), collapse = "")
     } else {
-      res <- paste(c("-- ", style.left(left), " ", rep("-", w)), collapse = "") 
+      res <- paste(c("-- ", style.left(left), " ", rep("-", width)), collapse = "") 
     }
   }
   class(res) <- "fastverse_rule"
