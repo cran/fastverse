@@ -5,8 +5,8 @@
 [![fastverse status badge](https://fastverse.r-universe.dev/badges/fastverse)](https://fastverse.r-universe.dev)
 [![CRAN status](https://www.r-pkg.org/badges/version/fastverse)](https://cran.r-project.org/package=fastverse) 
 [![cran checks](https://badges.cranchecks.info/worst/fastverse.svg)](https://cran.r-project.org/web/checks/check_results_fastverse.html)
-![downloads per month](http://cranlogs.r-pkg.org/badges/fastverse?color=blue)
-![downloads](http://cranlogs.r-pkg.org/badges/grand-total/fastverse?color=blue)
+![downloads per month](https://cranlogs.r-pkg.org/badges/fastverse?color=blue)
+![downloads](https://cranlogs.r-pkg.org/badges/grand-total/fastverse?color=blue)
  [![Conda Version](https://img.shields.io/conda/vn/conda-forge/r-fastverse.svg)](https://anaconda.org/conda-forge/r-fastverse)
  [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/r-fastverse.svg)](https://anaconda.org/conda-forge/r-fastverse)
  [![dependencies](https://tinyverse.netlify.app/badge/fastverse)](https://CRAN.R-project.org/package=fastverse)
@@ -63,7 +63,7 @@ remotes::install_github("fastverse/fastverse")
 
 ## Extending the *fastverse*
 
-Users can, via the `fastverse_entend()` function, freely attach extension packages. Setting `permanent = TRUE` adds these packages to the core *fastverse*. Another option is adding a `.fastverse` config file with packages to the project directory. Separate verses can be created with `fastverse_child()`. See the [**vignette**](https://fastverse.github.io/fastverse/articles/fastverse_intro.html) for details.  
+Users can, via the `fastverse_extend()` function, freely attach extension packages. Setting `permanent = TRUE` adds these packages to the core *fastverse*. Another option is adding a `.fastverse` config file with packages to the project directory. Separate verses can be created with `fastverse_child()`. See the [**vignette**](https://fastverse.github.io/fastverse/articles/fastverse_intro.html) for details.  
 
 <!--
 <details>
@@ -264,7 +264,7 @@ The total (recursive) dependency count is indicated for each package.
 
 - **[sf](https://github.com/r-spatial/sf/)**: Leading framework for geospatial computing and manipulation in R, offering a simple and flexible spatial data frame and supporting functionality (12 dependencies). 
 
-- **[s2](https://github.com/r-spatial/s2)**: Provides R bindings for [Google's s2 C++ library](https://s2geometry.io/) for high-performance geometric calculations on
+- **[s2](https://github.com/r-spatial/s2)**: Provides R bindings for [Google's s2 C++ library](https://github.com/google/s2geometry) for high-performance geometric calculations on
     the sphere (3D, geographic/geodetic CRS). Used as a backend to *sf* for calculations on geometries with geographic/geodetic CRS, but using *s2* directly can provide substantial performance gains (2 dependencies). 
 
 - **[geos](https://github.com/paleolimbot/geos/)**: Provides an R API to the [Open Source Geometry Engine (GEOS)](<https://trac.osgeo.org/geos/>) C-library, which can be used to very efficiently manipulate planar (2D/flat/projected CRS) geometries, and a vector format with which to efficiently store 'GEOS' geometries. Used as a backend to *sf* for calculations on geometries with projected CRS, but using *geos* directly can provide substantial performance gains (2 dependencies).
@@ -277,7 +277,7 @@ The total (recursive) dependency count is indicated for each package.
 
 - **[geodist](https://github.com/hypertidy/geodist)**: Provides very fast calculation of geodesic distances (0 dependencies).
 
-- **[dggridR](https://github.com/r-barnes/dggridR)**: Provides discrete global grids for R: allowing accurate partitioning of the earths surface into equally sized grid cells of different shapes and sizes (30 dependencies). The source project is not well maintained, and users are strongly encouraged to install [this fork](https://github.com/SebKrantz/dggridR) (version 3.1+) which fixes a major bug on Mac and introduces a *collapse* backend for faster grid materialization (14 dependencies). 
+- **[dggridR](https://github.com/r-barnes/dggridR)**: Provides discrete global grids for R: allowing accurate partitioning of the earths surface into equally sized grid cells of different shapes and sizes (11 dependencies). 
 
 - **[cppRouting](https://github.com/vlarmet/cppRouting)**: Algorithms for routing and solving the traffic assignment problem, including calculation of distances, shortest paths and isochrones on weighted graphs using several (optimized) variants of Dijkstra's algorithm (4 dependencies).
 
@@ -314,7 +314,7 @@ The total (recursive) dependency count is indicated for each package.
 
 - **[fst](https://github.com/fstpackage/fst)**: A compressed data file format that is very fast to read and write. Full random access in both rows and columns allows reading subsets from a '.fst' file (2 dependencies). 
 
-- **[qs](https://github.com/traversc/qs)** provides a lightning-fast and complete replacement for the `saveRDS` and `readRDS` functions in R. It 
+- **[qs](https://github.com/qsbase/qs)** provides a lightning-fast and complete replacement for the `saveRDS` and `readRDS` functions in R. It 
   supports general R objects with attributes and references - at similar speeds to *fst* - but does not provide on-disk random access to data subsets like *fst* (4 dependencies).
   
 - **[arrow](https://github.com/apache/arrow/tree/master/r)** provides both a low-level interface to the Apache Arrow C++ library (a multi-language toolbox for accelerated data interchange and in-memory processing) including fast reading / writing delimited files, efficient storage of data as `.parquet` or `.feather` files, efficient (lazy) queries and computations, and sharing data between R and Python (14 dependencies). It provides methods for several *dplyr* functions allowing highly efficient data manipulation on arrow datasets. Check out the [useR2022 workshop](https://arrow-user2022.netlify.app/) on working with larger than memory data with apache arrow in R, and the [apache arrow R cookbook](<https://arrow.apache.org/cookbook/r/index.html>) as well as the [awesome-arrow-r](https://github.com/thisisnic/awesome-arrow-r) repository.  
@@ -324,6 +324,12 @@ The total (recursive) dependency count is indicated for each package.
 - **[vroom](https://github.com/tidyverse/vroom)** provides fast reading of delimited files (23 dependencies).
 
   *Notes*: *data.table* provides `fread` and `fwrite` for fast reading of delimited files. 
+  
+#### Parallelization, High-Performance Computing and Out-Of-Memory Data
+
+- **[mirai](https://github.com/shikokuchuo/mirai)**: Minimalist async evaluation framework for R: a ‘mirai’ evaluates an expression in a parallel process, on the local machine or over the network, returning the result automatically upon completion. Also provides a parallel map function (1 dependency). 
+
+- See also the [High-Performance and Parallel Computing](https://CRAN.R-project.org/view=HighPerformanceComputing) Task View and the [futureverse](https://www.futureverse.org/). 
   
 ####  Compiling R
 
@@ -386,10 +392,6 @@ The total (recursive) dependency count is indicated for each package.
 
   *Notes*: These packages are wrappers around *data.table* and do not introduce own compiled code. 
   
-
-#### Parallelization, High-Performance Computing and Out-Of-Memory Data
-
-- See the [High-Performance and Parallel Computing](https://CRAN.R-project.org/view=HighPerformanceComputing) Task View and the [futureverse](https://www.futureverse.org/). 
 
 ***
   

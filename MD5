@@ -1,13 +1,13 @@
-d4ea96abc11aac01a76fb4bc35eaca82 *DESCRIPTION
+9ad1593dac6a8b70a6adaf9025b550f7 *DESCRIPTION
 b95b5ba10a3df9056d383de171b08320 *NAMESPACE
-ae5592f482cbf95a17b677df9b8908ea *NEWS.md
+be3ce782593f4c960877281c3847c71f *NEWS.md
 b9e35f81f4f2e9f8396021d76f6843d3 *R/attach.R
 933e093b509f9730f3639a2a434a5fff *R/children.R
 19871e593ca3b6dfc2a6d20e67a2811b *R/conflicts.R
 54ee59e7b6ae1c3ed104742659d013b1 *R/fastverse.R
 25b1e7c2a20201e0badb7af9051986d3 *R/update.R
-5ae926ff3d20207baf7d957ef8eb1e55 *R/utils.R
-6f4e432d8b8dca89948e8310386913a5 *README.md
+f026bf751ab6c7a4b0ffcc4b7877f33e *R/utils.R
+35a9e9656a3bb8ddfb342c4a1b9db808 *README.md
 285b9eaaf3e78522261829bec79520ed *build/vignette.rds
 300a9c98021ed33ae96dd42040a6647d *inst/doc/fastverse_intro.Rmd
 23c1b5c5fef3122cd94bbe88f798603f *inst/doc/fastverse_intro.html
